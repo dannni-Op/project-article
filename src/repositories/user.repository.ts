@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { AuthSignUpDto } from 'src/dto/auth-dto/auth.signup.dto';
 import { User } from 'src/entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
-import { RefreshToken } from 'types/refresh-token.type';
 
 @Injectable()
 export class UserRepository extends Repository<User> {
@@ -10,13 +9,42 @@ export class UserRepository extends Repository<User> {
     super(User, dataSource.createEntityManager());
   }
 
-  async createUser(request: AuthSignUpDto): Promise<User> {}
-  async getByUsername(username: string): Promise<User> {}
-  async getById(id: number): Promise<User> {}
+  async createUser(request: AuthSignUpDto): Promise<User> {
+    const ett = this.dataSource.createEntityManager();
+    const userEtt = ett.create(User, request);
+    const user = await ett.save(userEtt);
+    return user;
+  }
+  async getByUsername(username: string): Promise<User> {
+    const ett = this.dataSource.createEntityManager();
+    const user = await ett.findOne(User, {
+      where: {
+        username,
+      },
+    });
+
+    return user;
+  }
+  async getById(id: number): Promise<User> {
+    const ett = this.dataSource.createEntityManager();
+    const user = await ett.findOne(User, {
+      where: {
+        id,
+      },
+    });
+
+    return user;
+  }
+
   async updateRefreshToken(
     id: number,
-    request: RefreshToken,
-  ): Promise<boolean> {
-    //masih tidak pasti return boolean
+    refreshToken: string | null,
+  ): Promise<User> {
+    const user = await this.getById(id);
+    const ett = this.dataSource.createEntityManager();
+    user.refresh_token = refreshToken;
+
+    const result = await ett.save(user);
+    return result;
   }
 }
