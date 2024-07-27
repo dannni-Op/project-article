@@ -8,7 +8,7 @@ import { Tokens } from 'types/tokens.type';
 export class AuthService {
   constructor(private userRepository: UserRepository) {}
 
-  async signIn(request: AuthSignInDto): Promise<Tokens> {
+  async signIn(request: AuthSignInDto): Promise<Tokens | void> {
     //login
     //return tokens
 
@@ -25,10 +25,16 @@ export class AuthService {
 
     //save user
     const result = await this.userRepository.createUser(request);
+    return {
+      access_token: 'abc',
+      refresh_token: 'abc',
+    };
   }
 
   async logout(id: number): Promise<boolean> {
     //logout
     //return boolean
+    await this.userRepository.updateRefreshToken(id, null);
+    return true;
   }
 }

@@ -9,7 +9,7 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/signin')
-  async signIn(@Body() request: AuthSignInDto): Promise<Tokens> {
+  async signIn(@Body() request: AuthSignInDto): Promise<Tokens | void> {
     //login
     //return tokens
     const tokens = await this.authService.signIn(request);
@@ -20,13 +20,14 @@ export class AuthController {
     //register
     //return token supaya auto login
     const tokens = await this.authService.signUp(request);
+    return tokens;
   }
 
   @Delete('/logout')
   async logout(): Promise<boolean> {
     //logout
     //return boolean
-    const result: boolean = await this.authService.logout(id);
+    const result: boolean = await this.authService.logout(123);
     return result;
   }
 }

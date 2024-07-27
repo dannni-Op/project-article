@@ -11,23 +11,22 @@ export class UserRepository extends Repository<User> {
 
   async createUser(request: AuthSignUpDto): Promise<User> {
     const ett = this.dataSource.createEntityManager();
-    const userEtt = ett.create(User, request);
-    const user = await ett.save(userEtt);
+    const userReq = ett.create(User, request);
+    const user = await ett.save(userReq);
     return user;
   }
   async getByUsername(username: string): Promise<User> {
-    const ett = this.dataSource.createEntityManager();
-    const user = await ett.findOne(User, {
+    console.log('ok');
+    const user = await this.findOne({
       where: {
         username,
       },
     });
-
+    console.log('OK');
     return user;
   }
   async getById(id: number): Promise<User> {
-    const ett = this.dataSource.createEntityManager();
-    const user = await ett.findOne(User, {
+    const user = await this.findOne({
       where: {
         id,
       },
@@ -41,10 +40,9 @@ export class UserRepository extends Repository<User> {
     refreshToken: string | null,
   ): Promise<User> {
     const user = await this.getById(id);
-    const ett = this.dataSource.createEntityManager();
     user.refresh_token = refreshToken;
 
-    const result = await ett.save(user);
+    const result = await this.save(user);
     return result;
   }
 }

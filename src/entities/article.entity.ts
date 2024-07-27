@@ -1,14 +1,16 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 import { ArticleCategory } from './article-category.entity';
 
-@Entity()
+@Entity('articles')
 export class Article {
   @PrimaryGeneratedColumn()
   id: number;
@@ -20,16 +22,18 @@ export class Article {
   description: string;
 
   @Column()
-  createdAt: Date;
+  @CreateDateColumn()
+  created_at: Date;
 
   @Column()
-  updatedAt: Date;
+  @UpdateDateColumn()
+  updated_at: Date;
 
   @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: 'authorId' })
-  author: User;
+  authorId: User;
 
   @ManyToOne(() => ArticleCategory, (articleCategory) => articleCategory.id)
   @JoinColumn({ name: 'categoryId' })
-  category: ArticleCategory;
+  categoryId: ArticleCategory;
 }

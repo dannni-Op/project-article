@@ -28,12 +28,13 @@ export class Article1721980249347 implements MigrationInterface {
           {
             name: 'created_at',
             type: 'timestamp',
-            default: 'now()',
+            default: 'current_timestamp',
           },
           {
             name: 'updated_at',
             type: 'timestamp',
-            default: 'now()',
+            default: 'current_timestamp',
+            onUpdate: 'current_timestamp',
           },
           {
             name: 'authorId',
@@ -49,7 +50,7 @@ export class Article1721980249347 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'articles',
       new TableForeignKey({
-        name: 'FK_article_author',
+        name: 'FK_article_authorId',
         columnNames: ['authorId'],
         referencedTableName: 'users',
         referencedColumnNames: ['id'],
@@ -60,7 +61,7 @@ export class Article1721980249347 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'articles',
       new TableForeignKey({
-        name: 'FK_article_categories_name',
+        name: 'FK_article_categoryId',
         columnNames: ['categoryId'],
         referencedTableName: 'article_categories',
         referencedColumnNames: ['id'],
@@ -72,7 +73,7 @@ export class Article1721980249347 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropTable('articles');
-    await queryRunner.dropForeignKey('article', 'FK_article_categories_name');
-    await queryRunner.dropForeignKey('article', 'FK_article_author');
+    // await queryRunner.dropForeignKey('articles', 'FK_article_categories_name');
+    // await queryRunner.dropForeignKey('articles', 'FK_article_author');
   }
 }
