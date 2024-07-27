@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsDate, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsString, IsPositive } from 'class-validator';
 
 export class ArticleCreateDto {
   @IsNotEmpty()
@@ -10,8 +10,6 @@ export class ArticleCreateDto {
   description: string;
 
   @IsNotEmpty()
-  authorId: number;
-
-  @IsNotEmpty()
+  @IsPositive()
   categoryId: number;
 }

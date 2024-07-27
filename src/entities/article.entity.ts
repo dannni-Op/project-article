@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { ArticleCategory } from './article-category.entity';
+import { IsNumber } from 'class-validator';
 
 @Entity('articles')
 export class Article {
@@ -29,11 +30,19 @@ export class Article {
   @UpdateDateColumn()
   updated_at: Date;
 
+  @Column()
+  @IsNumber()
+  authorId: number;
+
+  @Column()
+  @IsNumber()
+  categoryId: number;
+
   @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: 'authorId' })
-  authorId: User;
+  author: User;
 
   @ManyToOne(() => ArticleCategory, (articleCategory) => articleCategory.id)
   @JoinColumn({ name: 'categoryId' })
-  categoryId: ArticleCategory;
+  category: ArticleCategory;
 }
