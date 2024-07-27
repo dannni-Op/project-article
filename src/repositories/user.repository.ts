@@ -16,13 +16,11 @@ export class UserRepository extends Repository<User> {
     return user;
   }
   async getByUsername(username: string): Promise<User> {
-    console.log('ok');
     const user = await this.findOne({
       where: {
         username,
       },
     });
-    console.log('OK');
     return user;
   }
   async getById(id: number): Promise<User> {
@@ -39,10 +37,12 @@ export class UserRepository extends Repository<User> {
     id: number,
     refreshToken: string | null,
   ): Promise<User> {
-    const user = await this.getById(id);
-    user.refresh_token = refreshToken;
+    const ett = this.dataSource.createEntityManager();
+    const userEtt = ett.update(User, id, {
+      refresh_token: refreshToken,
+    });
 
-    const result = await this.save(user);
+    const result = await this.getById(id);
     return result;
   }
 }

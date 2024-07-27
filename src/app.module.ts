@@ -7,11 +7,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmModuleOption } from './config/database.config';
 import { ConfigModule } from '@nestjs/config';
 import { CommonModule } from './commons/common.module';
+import { AtStrategy } from './stategies/at.strategy';
+import { RtStrategy } from './stategies/rt.strategy';
+import { APP_GUARD } from '@nestjs/core';
+import { AtGuard } from './commons/guards/at.guard';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync(typeOrmModuleOption),
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     CommonModule,
     AuthModule,
     ArticleModule,
@@ -19,6 +23,13 @@ import { CommonModule } from './commons/common.module';
     ArticleCategoryModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    AtStrategy,
+    RtStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: AtGuard,
+    },
+  ],
 })
 export class AppModule {}

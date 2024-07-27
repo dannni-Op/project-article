@@ -9,7 +9,10 @@ import { NothingChangesMessage } from 'types/nothing-changes.type';
 export class ArticleCategoryService {
   constructor(private articleCategoryRepository: ArticleCategoryRepository) {}
 
-  async create(request: ArticleCategoryCreateDto): Promise<ArticleCategory> {
+  async create(
+    userId: number,
+    request: ArticleCategoryCreateDto,
+  ): Promise<ArticleCategory> {
     //return article category
 
     const articleCategory = await this.articleCategoryRepository.getByName(
@@ -18,8 +21,10 @@ export class ArticleCategoryService {
     if (articleCategory)
       throw new HttpException('Category name already exist', 400);
 
-    const result =
-      await this.articleCategoryRepository.createArticleCategory(request);
+    const result = await this.articleCategoryRepository.createArticleCategory(
+      userId,
+      request,
+    );
     return result;
   }
 

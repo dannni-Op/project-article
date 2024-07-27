@@ -14,6 +14,7 @@ import { ArticleCreateDto } from 'src/dto/article-dto/article.create.dto';
 import { ArticleUpdateDto } from 'src/dto/article-dto/article.update.dto';
 import { NothingChangesMessage } from 'types/nothing-changes.type';
 import { ArticleSearchDto } from 'src/dto/article-dto/article.search.dto';
+import { Auth } from 'src/commons/decorators/auth.decorator';
 
 @Controller('/api/articles')
 export class ArticleController {
@@ -21,17 +22,16 @@ export class ArticleController {
 
   @Post()
   async create(
-    userId: number = 1,
+    @Auth() user: any,
     @Body() request: ArticleCreateDto,
   ): Promise<Article> {
-    const result = await this.articleService.create(userId, request);
+    const result = await this.articleService.create(user.sub, request);
     return result;
   }
 
   @Get()
   //search by category name, title, author
   async search(
-    userId: number,
     @Query('category') category: string,
     @Query('title') title: string,
     @Query('author') author: string,
@@ -55,18 +55,18 @@ export class ArticleController {
   @Put('/:id')
   //update article by id
   async update(
-    userId: number = 1,
+    @Auth() user: any,
     @Body() request: ArticleUpdateDto,
     @Param('id') id: number,
   ): Promise<Article | NothingChangesMessage> {
-    const article = await this.articleService.update(userId, id, request);
+    const article = await this.articleService.update(user.sub, id, request);
     return article;
   }
 
   @Delete('/:id')
   //delete by id
-  async delete(userId: number = 1, @Param('id') id: number): Promise<boolean> {
-    const result = await this.articleService.delete(userId, id);
+  async delete(@Auth() user: any, @Param('id') id: number): Promise<boolean> {
+    const result = await this.articleService.delete(user.sub, id);
     return result;
   }
 }

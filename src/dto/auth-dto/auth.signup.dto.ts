@@ -12,8 +12,4 @@ export class AuthSignUpDto {
   @IsString()
   @Length(1, 255)
   name: string;
-
-  @IsEmail()
-  @Length(1, 255)
-  email: string;
 }

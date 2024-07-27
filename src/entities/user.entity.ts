@@ -1,4 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 import { Article } from './article.entity';
 
 @Entity({ name: 'users' })
@@ -22,6 +28,6 @@ export class User {
   @Column({ type: 'varchar', length: 255, nullable: true })
   refresh_token?: string;
 
-  @OneToMany(() => Article, (article) => article.authorId)
+  @OneToMany(() => Article, (article) => article.author)
   articles: Article[];
 }

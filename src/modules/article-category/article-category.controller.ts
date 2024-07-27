@@ -14,6 +14,7 @@ import { ArticleCategoryService } from './article-category.service';
 import { ArticleCategoryUpdateDto } from 'src/dto/article-category-dto/article-category.update.dto';
 import { ArticleCategoryCreateDto } from 'src/dto/article-category-dto/article-category.create.dto';
 import { NothingChangesMessage } from 'types/nothing-changes.type';
+import { Auth } from 'src/commons/decorators/auth.decorator';
 
 @Controller('/api/article-categories')
 export class ArticleCategoryController {
@@ -21,9 +22,13 @@ export class ArticleCategoryController {
 
   @Post()
   async create(
+    @Auth() user: any,
     @Body() request: ArticleCategoryCreateDto,
   ): Promise<ArticleCategory> {
-    const articleCategory = await this.articleCateogryService.create(request);
+    const articleCategory = await this.articleCateogryService.create(
+      user.sub,
+      request,
+    );
     return articleCategory;
   }
 

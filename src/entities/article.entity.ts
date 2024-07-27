@@ -38,11 +38,11 @@ export class Article {
   @IsNumber()
   categoryId: number;
 
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.articles)
   @JoinColumn({ name: 'authorId' })
   author: User;
 
-  @ManyToOne(() => ArticleCategory, (articleCategory) => articleCategory.id)
+  @ManyToOne(() => ArticleCategory, (articleCategory) => articleCategory.articles)
   @JoinColumn({ name: 'categoryId' })
   category: ArticleCategory;
 }

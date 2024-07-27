@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsPositive } from 'class-validator';
+import { IsNotEmpty, IsString, IsPositive, IsNumber } from 'class-validator';
 
 export class ArticleCreateDto {
   @IsNotEmpty()
@@ -10,6 +10,6 @@ export class ArticleCreateDto {
   description: string;
 
   @IsNotEmpty()
-  @IsPositive()
+  @IsNumber()
   categoryId: number;
 }

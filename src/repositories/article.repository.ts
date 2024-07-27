@@ -61,13 +61,13 @@ export class ArticleRepository extends Repository<Article> {
     const query = ett
       .createQueryBuilder(Article, 'article')
       .innerJoin('article.author', 'user')
-      .innerJoin('article.category', 'articlecategory');
+      .innerJoin('article.category', 'articleCategory');
 
     if (request.author) {
       query.andWhere('user.name LIKE :name', { name: `%${request.author}%` });
     }
     if (request.category) {
-      query.andWhere('articlecategory.name LIKE :name', {
+      query.andWhere('articleCategory.name LIKE :name', {
         name: `%${request.category}%`,
       });
     }
