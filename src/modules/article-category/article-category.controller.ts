@@ -1,34 +1,66 @@
-import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { ArticleCategory } from 'src/entities/article-category.entity';
 import { ArticleCategoryService } from './article-category.service';
+import { ArticleCategoryUpdateDto } from 'src/dto/article-category-dto/article-category.update.dto';
+import { ArticleCategoryCreateDto } from 'src/dto/article-category-dto/article-category.create.dto';
+import { NothingChangesMessage } from 'types/nothing-changes.type';
 
 @Controller('/api/article-categories')
 export class ArticleCategoryController {
   constructor(private articleCateogryService: ArticleCategoryService) {}
 
   @Post()
-  async create(): Promise<ArticleCategory> {
-    const articleCategory = await this.articleCateogryService.create({
-      name: 'food',
-    });
+  async create(
+    @Body() request: ArticleCategoryCreateDto,
+  ): Promise<ArticleCategory> {
+    const articleCategory = await this.articleCateogryService.create(request);
     return articleCategory;
   }
 
   @Get()
   //search by name
-  async search() {}
+  async search(@Query('name') name: string) {
+    const articleCategory = await this.articleCateogryService.getByName(name);
+    return articleCategory;
+  }
 
-  @Get()
+  @Get('/:id')
   //get by id
   //dengan list article
-  async get() {}
+  async get(@Param('id', ParseIntPipe) id: number): Promise<ArticleCategory> {
+    const articleCategory = await this.articleCateogryService.getById(id);
+    return articleCategory;
+  }
 
-  @Put()
+  @Put('/:id')
   //update by id
-  async update() {}
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() request: ArticleCategoryUpdateDto,
+  ): Promise<ArticleCategory | NothingChangesMessage> {
+    console.log(request);
+    const articleCategory = await this.articleCateogryService.update(
+      id,
+      request,
+    );
+    return articleCategory;
+  }
 
-  @Delete()
+  @Delete('/:id')
   //delete by id
   //bisa didelete jika belum punya artikel
-  async delete() {}
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<boolean> {
+    const articleCategory = await this.articleCateogryService.delete(id);
+    return articleCategory;
+  }
 }

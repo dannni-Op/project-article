@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Article } from './article.entity';
 
 @Entity({ name: 'users' })
 @Unique(['username'])
@@ -20,4 +21,7 @@ export class User {
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   refresh_token?: string;
+
+  @OneToMany(() => Article, (article) => article.authorId)
+  articles: Article[];
 }
