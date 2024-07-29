@@ -21,10 +21,8 @@ export class ArticleCategoryService {
     if (articleCategory)
       throw new HttpException('Category name already exist', 400);
 
-    const result = await this.articleCategoryRepository.createArticleCategory(
-      userId,
-      request,
-    );
+    const result =
+      await this.articleCategoryRepository.createArticleCategory(request);
     return result;
   }
 

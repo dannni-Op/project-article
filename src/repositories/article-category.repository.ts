@@ -11,7 +11,6 @@ export class ArticleCategoryRepository extends Repository<ArticleCategory> {
   }
 
   async createArticleCategory(
-    userId: number,
     request: ArticleCategoryCreateDto,
   ): Promise<ArticleCategory> {
     const ett = this.dataSource.createEntityManager();
